@@ -91,52 +91,6 @@ body {
   padding: 10px;
   overflow: auto;
 }
-
-/* Sidebar search + icon row */
-.sidebar-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 6px 10px 6px;
-}
-.search-input {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 6px 10px;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-.search-input .icon {
-  color: var(--muted);
-}
-.search-input input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: .95rem;
-  color: var(--text);
-  background: transparent;
-}
-.icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--primary);
-  cursor: pointer;
-  transition: all .15s ease;
-}
-.icon-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
-.icon-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
-
 .section-header {
   display: flex;
   align-items: center;
