@@ -2,6 +2,14 @@
 
 This project provides a minimal React template with a clean, modern UI and minimal dependencies.
 
+> Preview environments note
+>
+> If you see "Invalid Host header" when accessing the dev server behind a proxy/ingress (such as cloud previews), set the following environment variables:
+> - DANGEROUSLY_DISABLE_HOST_CHECK=true
+> - HOST=0.0.0.0
+>
+> You can copy `.env.example` to `.env` in the notes_frontend folder to apply these defaults for previews.
+
 ## Features
 
 - **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
