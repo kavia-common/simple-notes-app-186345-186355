@@ -8,8 +8,16 @@ import './App.css';
  * - Minimal light theme styling, inline error handling and loading states
  */
 
-// Helpers
-const API_BASE = 'http://localhost:3001';
+/**
+ * Compute API base from environment variables with sensible defaults.
+ * - Prefer REACT_APP_API_BASE if provided.
+ * - Fall back to REACT_APP_BACKEND_URL.
+ * - Default to http://localhost:3001 for local dev.
+ */
+const API_BASE =
+  (process.env.REACT_APP_API_BASE && process.env.REACT_APP_API_BASE.trim()) ||
+  (process.env.REACT_APP_BACKEND_URL && process.env.REACT_APP_BACKEND_URL.trim()) ||
+  'http://localhost:3001';
 
 // PUBLIC_INTERFACE
 function TopNav({ onNew, onDelete, disableNew, disableDelete, loading, error }) {
