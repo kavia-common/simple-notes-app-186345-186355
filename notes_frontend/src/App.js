@@ -19,6 +19,47 @@ const API_BASE =
   (process.env.REACT_APP_BACKEND_URL && process.env.REACT_APP_BACKEND_URL.trim()) ||
   'http://localhost:3001';
 
+/** Simple inline icons to avoid extra dependencies. */
+const IconSearch = ({ className = '', label = 'Search' }) => (
+  <svg
+    className={className}
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-label={label}
+    role="img"
+  >
+    <path
+      d="M21 21l-4.2-4.2m1.2-5.6a7 7 0 11-14 0 7 7 0 0114 0z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const IconPlus = ({ className = '', label = 'Add' }) => (
+  <svg
+    className={className}
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-label={label}
+    role="img"
+  >
+    <path
+      d="M12 5v14M5 12h14"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 // PUBLIC_INTERFACE
 function TopNav({ onNew, onDelete, disableNew, disableDelete, loading, error }) {
   /** Top navigation bar with actions to create and delete notes. */
@@ -57,19 +98,62 @@ function TopNav({ onNew, onDelete, disableNew, disableDelete, loading, error }) 
 }
 
 // PUBLIC_INTERFACE
-function NotesList({ notes, selectedId, onSelect, loading }) {
-  /** Left pane list of notes. */
+function Sidebar({
+  query,
+  setQuery,
+  onAdd,
+  notes,
+  selectedId,
+  onSelect,
+  loading,
+}) {
+  /** Left sidebar with search, add icon, and filtered notes list. */
+  const filtered = query.trim()
+    ? notes.filter((n) => {
+        const q = query.toLowerCase();
+        return (
+          (n.title || 'Untitled').toLowerCase().includes(q) ||
+          (n.content || '').toLowerCase().includes(q)
+        );
+      })
+    : notes;
+
   return (
-    <aside className="left-pane" aria-label="Notes list">
+    <aside className="left-pane" aria-label="Sidebar">
+      <div className="sidebar-search">
+        <div className="search-input">
+          <IconSearch className="icon" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search notes…"
+            aria-label="Search notes"
+          />
+        </div>
+        <button
+          className="icon-btn"
+          onClick={onAdd}
+          title="Add new note"
+          aria-label="Add new note"
+          disabled={loading}
+        >
+          <IconPlus />
+        </button>
+      </div>
+
       <div className="section-header">
         <h2>All Notes</h2>
         {loading ? <span className="badge">Syncing…</span> : null}
       </div>
+
       <ul className="note-items">
-        {notes.length === 0 && !loading ? (
-          <li className="placeholder">No notes yet. Click "New Note" to create one.</li>
+        {filtered.length === 0 && !loading ? (
+          <li className="placeholder">
+            {query ? 'No results found.' : 'No notes yet. Click "New Note" to create one.'}
+          </li>
         ) : null}
-        {notes.map((n) => (
+        {filtered.map((n) => (
           <li key={n.id}>
             <button
               className={`note-item ${n.id === selectedId ? 'active' : ''}`}
@@ -171,6 +255,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [query, setQuery] = useState('');
 
   const selectedNote = useMemo(
     () => notes.find((n) => n.id === selectedId) || null,
@@ -301,7 +386,10 @@ function App() {
         error={error}
       />
       <main className="main-split">
-        <NotesList
+        <Sidebar
+          query={query}
+          setQuery={setQuery}
+          onAdd={handleNew}
           notes={notes}
           selectedId={selectedId}
           onSelect={handleSelect}
